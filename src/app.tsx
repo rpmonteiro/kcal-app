@@ -1,64 +1,24 @@
-import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { CounterSection } from 'components/counter-section'
-import { spacing } from 'styles/common'
+import { HomeScreen } from 'screens/home'
+import { createNavigationContainer, createBottomTabNavigator } from 'react-navigation'
+import React from 'react'
+import { store, persistor } from './store'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
-interface State {
-  kcal: number
-  exercise: number
-  offset: number
-  deficit: boolean
-}
+const AppNavigator = createBottomTabNavigator({
+  home: HomeScreen
+})
 
-export default class App extends Component<{}, State> {
-  state = {
-    kcal: 0,
-    exercise: 0,
-    offset: 500,
-    deficit: true
-  }
+const Navigator = createNavigationContainer(AppNavigator)
 
-  kcalChangeHandler = (kcal: number) => {
-    this.setState({ kcal })
-  }
-
-  exerciseChangeHandler = (exercise: number) => {
-    this.setState({ exercise })
-  }
-
+export class App extends React.Component<{}, {}> {
   render() {
-    const { kcal, exercise } = this.state
     return (
-      <View style={styles.container}>
-        <View style={styles.counterSectionsContainer}>
-          <View style={styles.counterSectionContainer1}>
-            <CounterSection value={kcal} changeHandler={this.kcalChangeHandler} />
-          </View>
-          <View style={styles.counterSectionContainer2}>
-            <CounterSection value={exercise} changeHandler={this.exerciseChangeHandler} />
-          </View>
-        </View>
-      </View>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Navigator />
+        </PersistGate>
+      </Provider>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginHorizontal: spacing.sm
-  },
-  counterSectionsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: '50%'
-  },
-  counterSectionContainer1: {
-    flex: 1,
-    marginRight: spacing.sm
-  },
-  counterSectionContainer2: {
-    flex: 1,
-    marginLeft: spacing.sm
-  }
-})
