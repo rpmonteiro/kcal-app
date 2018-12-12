@@ -4,9 +4,11 @@ import React from 'react'
 import { store, persistor } from './store'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import { SettingsScreen } from 'screens/settings'
 
 const AppNavigator = createBottomTabNavigator({
-  home: HomeScreen
+  home: HomeScreen,
+  settings: SettingsScreen
 })
 
 const Navigator = createNavigationContainer(AppNavigator)
