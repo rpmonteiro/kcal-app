@@ -4,6 +4,10 @@ export const spacing = {
   lg: 30
 }
 
+export const inputs = {
+  inputHeight: 35
+}
+
 export const margins = {
   mgTopSm: {
     marginTop: spacing.sm
@@ -21,6 +25,8 @@ export const buttons = {
 }
 
 export const colors = {
+  white: '#FFFFFF',
+
   // https://superdevresources.com/tools/color-shades#fff200
   yellow1: '#fffee5',
   yellow2: '#fffbb3',
@@ -32,6 +38,11 @@ export const colors = {
   red2: '#ffbfb3',
   red3: '#ff9380',
   red4: '#ff694d',
+
+  blue1: '#e5f3ff',
+  blue2: '#b3dbff',
+  blue3: '#80c4ff',
+  blue4: '#4dacff',
 
   red: '#ee4035',
   orange: '#f37736',

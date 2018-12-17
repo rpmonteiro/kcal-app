@@ -1,5 +1,6 @@
 import React from 'react'
-import { TextInput } from 'react-native'
+import { TextInput, StyleSheet } from 'react-native'
+import { inputs, colors } from 'styles/common'
 
 interface Props {
   value: string
@@ -22,10 +23,22 @@ export class NumberInput extends React.Component<Props, {}> {
         maxLength={5}
         selectTextOnFocus={true}
         keyboardType="number-pad"
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        style={styles.input}
         onChangeText={this.changeHandler}
-        value={value.toString()}
+        value={value}
       />
     )
   }
 }
+
+const styles = StyleSheet.create({
+  input: {
+    elevation: 2,
+    textAlign: 'center',
+    paddingTop: 0,
+    paddingBottom: 0,
+    height: inputs.inputHeight,
+    backgroundColor: colors.yellow1,
+    borderRadius: 3
+  }
+})

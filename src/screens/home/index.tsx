@@ -25,10 +25,14 @@ export class HomeScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.counterSectionsContainer}>
           <View style={styles.counterSectionContainer1}>
-            <CounterSection value={kcal} changeHandler={this.kcalChangeHandler} />
+            <CounterSection label="Kcal" value={kcal} changeHandler={this.kcalChangeHandler} />
           </View>
           <View style={styles.counterSectionContainer2}>
-            <CounterSection value={exercise} changeHandler={this.exerciseChangeHandler} />
+            <CounterSection
+              label="Exercise"
+              value={exercise}
+              changeHandler={this.exerciseChangeHandler}
+            />
           </View>
         </View>
       </View>

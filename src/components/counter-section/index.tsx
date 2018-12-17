@@ -1,11 +1,12 @@
 import React from 'react'
 import { NumberInput } from 'components/input'
-import { View, StyleSheet } from 'react-native'
-import { margins } from 'styles/common'
+import { View, StyleSheet, Text } from 'react-native'
+import { margins, spacing, colors } from 'styles/common'
 import { ThreeButtons } from 'components/three-buttons'
 
 interface Props {
   value: number
+  label: string
   changeHandler: (value: number) => void
 }
 
@@ -30,6 +31,7 @@ export class CounterSection extends React.Component<Props, {}> {
 
   negativeButtons = (
     <ThreeButtons
+      extraButtonStyles={[styles.negativeButton]}
       buttonProps={[
         { label: '- 50', clickHandler: this.buttonClickHandler(-50) },
         { label: '- 100', clickHandler: this.buttonClickHandler(-100) },
@@ -43,11 +45,12 @@ export class CounterSection extends React.Component<Props, {}> {
   }
 
   render() {
-    const { value } = this.props
+    const { value, label } = this.props
     return (
       <View style={styles.container}>
-        <View>
-          <NumberInput value={value} changeHandler={this.inputChangeHandler} />
+        <Text style={styles.label}>{label}</Text>
+        <View style={styles.inputContainer}>
+          <NumberInput value={value.toString()} changeHandler={this.inputChangeHandler} />
         </View>
         <View style={[styles.buttonsRow, margins.mgTopSm]}>{this.positiveButtons}</View>
         <View style={[styles.buttonsRow, margins.mgTopSm]}>{this.negativeButtons}</View>
@@ -59,9 +62,18 @@ export class CounterSection extends React.Component<Props, {}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)'
+    alignItems: 'center'
+  },
+  negativeButton: {
+    backgroundColor: colors.red1
+  },
+  label: {
+    marginBottom: spacing.sm
   },
   buttonsRow: {
     flexDirection: 'row'
+  },
+  inputContainer: {
+    width: '40%'
   }
 })

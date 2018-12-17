@@ -13,8 +13,8 @@ export interface ButtonProps {
   label: string
   size?: 'small' | 'big'
   clickHandler: () => void
-  extraButtonStyles: Array<RegisteredStyle<ViewStyle>>
-  extraContainerStyles: Array<RegisteredStyle<ViewStyle>>
+  extraButtonStyles?: Array<RegisteredStyle<ViewStyle>>
+  extraContainerStyles?: Array<RegisteredStyle<ViewStyle>>
 }
 
 export const Button: React.StatelessComponent<ButtonProps> = ({
@@ -41,17 +41,18 @@ export const Button: React.StatelessComponent<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flex: 1,
-    overflow: 'hidden'
+    flex: 1
   },
   button: {
+    elevation: 2,
     paddingVertical: spacing.sm,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.cream
+    backgroundColor: colors.blue1
   },
   text: {
-    color: 'blue'
+    fontSize: 12,
+    color: 'black'
   },
   normal: {},
   big: {},
