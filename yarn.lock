@@ -6441,6 +6441,11 @@ webidl-conversions@^4.0.0:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
 
+week-identifier@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/week-identifier/-/week-identifier-1.0.2.tgz#cc53fa78cec4d86880ba087b2a2db9e2162f4552"
+  integrity sha512-d3dGF6A4yfhQT8fNZwyK7nQjcR9neuuDPvcv35K/H12vSB09ow+ZXEQirOvmuaYbo4AmMy8+M8UmcFseBxi0dA==
+
 whatwg-encoding@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/whatwg-encoding/-/whatwg-encoding-1.0.2.tgz#bd68ad169c3cf55080562257714bf012e668a165"

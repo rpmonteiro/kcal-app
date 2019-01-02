@@ -10,6 +10,7 @@ interface Props {
 export class NumberInput extends React.Component<Props, {}> {
   changeHandler = (text: string) => {
     const value = text.replace(/\D/g, '')
+    console.log('changeHandler', { text, value })
     this.props.changeHandler(parseInt(value) || 0)
   }
 
