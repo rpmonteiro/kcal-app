@@ -1,8 +1,8 @@
 import React from 'react'
-import { TextInput, StyleSheet } from 'react-native'
-import { inputs, colors } from 'styles/common'
+import { TextInput, StyleSheet, TextInputProps } from 'react-native'
+import { colors } from 'styles/common'
 
-interface Props {
+interface Props extends TextInputProps {
   value: string
   changeHandler: (value: number) => void
 }
@@ -10,12 +10,11 @@ interface Props {
 export class NumberInput extends React.Component<Props, {}> {
   changeHandler = (text: string) => {
     const value = text.replace(/\D/g, '')
-    console.log('changeHandler', { text, value })
     this.props.changeHandler(parseInt(value) || 0)
   }
 
   render() {
-    const { value } = this.props
+    const { value, changeHandler, ...otherProps } = this.props
 
     return (
       <TextInput
@@ -27,6 +26,7 @@ export class NumberInput extends React.Component<Props, {}> {
         style={styles.input}
         onChangeText={this.changeHandler}
         value={value}
+        {...otherProps}
       />
     )
   }
@@ -34,12 +34,10 @@ export class NumberInput extends React.Component<Props, {}> {
 
 const styles = StyleSheet.create({
   input: {
-    elevation: 2,
     textAlign: 'center',
     paddingTop: 0,
     paddingBottom: 0,
-    height: inputs.inputHeight,
-    backgroundColor: colors.yellow1,
-    borderRadius: 3
+    borderBottomWidth: 1,
+    borderBottomColor: colors.blue3
   }
 })

@@ -1,44 +1,49 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { CounterSection } from 'components/counter-section'
 import { spacing } from 'styles/common'
+import { connect } from 'react-redux'
+import { RootState } from 'store/root-reducer'
+import { Omit, OneNumberPerDay } from 'utils/some-types'
+import { Dispatch } from 'utils/redux-utils'
+import { Actions as DeficitActions } from 'store/deficit/actions'
+import { dayIdx, week } from 'config'
 
-export class HomeScreen extends React.Component {
-  state = {
-    kcal: 0,
-    exercise: 0,
-    offset: 500,
-    deficit: true
-  }
+interface InjectedReduxProps {
+  dispatch: Dispatch
+  weekKcal: OneNumberPerDay
+  weekExercise: OneNumberPerDay
+}
 
-  kcalChangeHandler = (kcal: number) => {
-    this.setState({ kcal })
-  }
-
-  exerciseChangeHandler = (exercise: number) => {
-    this.setState({ exercise })
-  }
-
-  render() {
-    const { kcal, exercise } = this.state
-    return (
-      <View style={styles.container}>
-        <View style={styles.counterSectionsContainer}>
-          <View style={styles.counterSectionContainer1}>
-            <CounterSection label="Kcal" value={kcal} changeHandler={this.kcalChangeHandler} />
-          </View>
-          <View style={styles.counterSectionContainer2}>
-            <CounterSection
-              label="Exercise"
-              value={exercise}
-              changeHandler={this.exerciseChangeHandler}
-            />
-          </View>
+export const HomeScreenBase: FunctionComponent<InjectedReduxProps> = React.memo(
+  ({ weekKcal, weekExercise, dispatch }) => (
+    <View style={styles.container}>
+      <View style={styles.counterSectionsContainer}>
+        <View style={styles.counterSectionContainer1}>
+          <CounterSection
+            label="Kcal"
+            value={weekKcal[dayIdx]}
+            changeHandler={(value) => dispatch(DeficitActions.updateDeficit('kcal', value))}
+          />
+        </View>
+        <View style={styles.counterSectionContainer2}>
+          <CounterSection
+            label="Exercise"
+            value={weekExercise[dayIdx]}
+            changeHandler={(value) => dispatch(DeficitActions.updateDeficit('exercise', value))}
+          />
         </View>
       </View>
-    )
-  }
-}
+    </View>
+  )
+)
+
+const mapStateToProps = (state: RootState): Omit<InjectedReduxProps, 'dispatch'> => ({
+  weekExercise: state.deficit.exercise[week],
+  weekKcal: state.deficit.kcal[week]
+})
+
+export const HomeScreen = connect(mapStateToProps)(HomeScreenBase)
 
 const styles = StyleSheet.create({
   container: {

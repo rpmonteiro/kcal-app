@@ -1,12 +1,12 @@
 import { ActionsUnion, createAction } from 'utils/redux-utils'
-import { GoalsState } from './reducer'
+import { DeficitState } from './reducer'
 
 export enum ActionTypes {
-  UPDATE = '[GOALS] UPDATE'
+  UPDATE = '[DEFICIT] UPDATE'
 }
 
 export const Actions = {
-  updateGoal: (key: keyof GoalsState, value: number | string) =>
+  updateDeficit: (key: keyof DeficitState, value: number) =>
     createAction(ActionTypes.UPDATE, { key, value })
 }
 

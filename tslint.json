@@ -8,6 +8,8 @@
   ],
   "rules": {
     "radix": false,
+    "one-variable-per-declaration": false,
+    "jsx-no-lambda": false,
     "no-console": false,
     "ordered-imports": false,
     "member-access": false,

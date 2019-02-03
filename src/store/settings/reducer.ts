@@ -3,10 +3,12 @@ import { Actions, ActionTypes } from './actions'
 
 export interface SettingsState {
   metricUnits: boolean
+  bmr: number
 }
 
 export const initialState: SettingsState = {
-  metricUnits: true
+  metricUnits: true,
+  bmr: 0
 }
 
 export const SettingsReducer: Reducer<SettingsState> = (

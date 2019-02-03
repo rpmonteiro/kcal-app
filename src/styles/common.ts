@@ -1,29 +1,3 @@
-export const spacing = {
-  sm: 10,
-  md: 20,
-  lg: 30
-}
-
-export const inputs = {
-  inputHeight: 35
-}
-
-export const margins = {
-  mgTopSm: {
-    marginTop: spacing.sm
-  }
-}
-
-export const radius = {
-  sm: 5,
-  md: 10,
-  lg: 15
-}
-
-export const buttons = {
-  sizeSmall: 50
-}
-
 export const colors = {
   white: '#FFFFFF',
 
@@ -48,5 +22,39 @@ export const colors = {
   orange: '#f37736',
   cream: '#fdf498',
   green: '#7bc043',
-  blue: '#0392cf'
+  blue: '#0392cf',
+
+  textPrimary: '#202124',
+  textSecondary: '#5f6368'
+}
+
+export const spacing = {
+  sm: 10,
+  md: 20,
+  lg: 30
+}
+
+export const inputs = {
+  inputHeight: 35
+}
+
+export const textSecondary = {
+  fontSize: 14,
+  color: colors.textSecondary
+}
+
+export const margins = {
+  mgTopSm: {
+    marginTop: spacing.sm
+  }
+}
+
+export const radius = {
+  sm: 5,
+  md: 10,
+  lg: 15
+}
+
+export const buttons = {
+  sizeSmall: 50
 }

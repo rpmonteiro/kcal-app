@@ -1,127 +1,202 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { RootState } from 'store/root-reducer'
-import { GoalObj } from 'store/goals/reducer'
 import { Dispatch } from 'utils/redux-utils'
 import { Actions as GoalActions } from 'store/goals/actions'
 import { NumberInput } from 'components/input'
-import weekIdentifier from 'week-identifier'
-import { spacing } from 'styles/common'
-import cn from 'classnames-react-native'
-import { Table } from 'components/table'
+import { spacing, textSecondary } from 'styles/common'
 import { Omit } from 'utils/some-types'
-
-const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-const week = weekIdentifier()
-interface GoalsScreenProps {}
+import { GoalsState } from 'store/goals/reducer'
+import { DatePicker } from 'components/date-picker'
+import { getDaysDiff } from 'utils/date-utils'
+import { kiloOfFat } from 'config'
 
 interface InjectedReduxProps {
-  exerciseGoals: GoalObj
-  kcalGoals: GoalObj
+  goals: GoalsState
   dispatch: Dispatch
 }
 
-class GoalsScreenBase extends Component<GoalsScreenProps & InjectedReduxProps> {
-  exerciseGoalChangeHandler = (idx: number) => {
-    return (value: number) => {
-      this.props.dispatch(GoalActions.setGoal(idx, value, 'exercise'))
-    }
+class GoalsScreenBase extends Component<InjectedReduxProps> {
+  updateGoalHandler = (key: keyof GoalsState, value: string | number) => {
+    this.props.dispatch(GoalActions.updateGoal(key, value))
   }
-
-  kcalGoalChangeHandler = (idx: number) => {
-    return (value: number) => {
-      this.props.dispatch(GoalActions.setGoal(idx, value, 'kcal'))
-    }
-  }
-
-  headerRow = (
-    <View style={styles.headerRow}>
-      <Text style={styles.headerCell} key="-1" />
-      <Text style={styles.headerCell} key="0">
-        Kcal
-      </Text>
-      <Text style={styles.headerCell} key="1">
-        Exercise
-      </Text>
-    </View>
-  )
 
   render() {
-    const { exerciseGoals, kcalGoals } = this.props
-    console.log({ exerciseGoals, kcalGoals })
-    const rows = weekdays.map((weekday, idx) => (
-      <View key={`${weekday}-${idx}`} style={cn(styles.row, [styles.withMarginTop, idx > 0])}>
-        <View style={styles.cell}>
-          <Text style={styles.weekdayCell}>{weekday}</Text>
-        </View>
-        <View style={styles.cell}>
+    const {
+      goals: { bmr, targetDate, targetWeight, currWeight }
+    } = this.props
+    const bmrTotal = bmr * 7
+    const totalDays = getDaysDiff(targetDate)
+    const weightDiff = currWeight - targetWeight
+    const isWeightLoss = weightDiff > 0
+    const weightDiffAbs = Math.abs(weightDiff)
+    const dailyDeficitTarget = parseInt(((weightDiffAbs * kiloOfFat) / totalDays).toFixed(0)) || ''
+    console.log({ totalDays, weightDiff, isWeightLoss, weightDiffAbs, dailyDeficitTarget })
+
+    const bmrSection = (
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionLabel}>BMR</Text>
+        <View style={styles.sectionInput}>
           <NumberInput
-            value={(exerciseGoals[week][idx] || 0).toString()}
-            changeHandler={this.exerciseGoalChangeHandler(idx)}
+            maxLength={4}
+            value={bmr.toString()}
+            changeHandler={(value) => this.updateGoalHandler('bmr', value)}
           />
         </View>
-        <View style={styles.cell}>
+        <Text style={styles.sectionUnit}>kcal</Text>
+      </View>
+    )
+
+    const currWeightSection = (
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionLabel}>Current weight</Text>
+        <View style={styles.sectionInput}>
           <NumberInput
-            value={(kcalGoals[week][idx] || 0).toString()}
-            changeHandler={this.kcalGoalChangeHandler(idx)}
+            maxLength={3}
+            value={currWeight.toString()}
+            changeHandler={(value) => this.updateGoalHandler('currWeight', value)}
+          />
+        </View>
+        <Text style={styles.sectionUnit}>kg</Text>
+      </View>
+    )
+
+    const targetWeightSection = (
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionLabel}>Target weight</Text>
+        <View style={styles.sectionInput}>
+          <NumberInput
+            maxLength={3}
+            value={targetWeight.toString()}
+            changeHandler={(value) => this.updateGoalHandler('targetWeight', value)}
+          />
+        </View>
+        <Text style={styles.sectionUnit}>kg</Text>
+      </View>
+    )
+
+    const targetDateSection = (
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionLabel}>Target date</Text>
+        <View style={styles.dateInput}>
+          <DatePicker
+            value={targetDate}
+            changeHandler={(date) => this.updateGoalHandler('targetDate', date)}
           />
         </View>
       </View>
-    ))
+    )
+
+    const dailyDeficitSection = (
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionLabel}>Daily deficit</Text>
+        <Text style={styles.sectionInput}>{dailyDeficitTarget}</Text>
+        <Text style={styles.sectionUnit}>kcal</Text>
+      </View>
+    )
+
+    // const total = (
+    //   <View key="total" style={[styles.row, styles.withMarginTop]}>
+    //     <View style={styles.textCell}>
+    //       <Text style={styles.weekdayCell}>Total</Text>
+    //     </View>
+    //     <View style={styles.textCell}>
+    //       <Text>{kcalTotal.toLocaleString()} kcal</Text>
+    //     </View>
+    //     <View style={styles.textCell}>
+    //       <Text>{exerciseTotal.toLocaleString()} kcal</Text>
+    //     </View>
+    //   </View>
+    // )
+
+    // const deficit = (
+    //   <View key="deficit" style={[styles.row, styles.withMarginTop]}>
+    //     <View style={styles.textCell}>
+    //       <Text style={styles.weekdayCell}>Weekly deficit</Text>
+    //     </View>
+    //     <View style={styles.textCell}>
+    //       <Text>{deficitTotal.toLocaleString()} kcal</Text>
+    //     </View>
+    //     <View style={styles.textCell} />
+    //   </View>
+    // )
+
+    // const estimatedWeightLoss = (
+    //   <View key="weight-loss" style={[styles.row, styles.withMarginTop]}>
+    //     <View style={styles.textCell}>
+    //       <Text style={styles.weekdayCell}>Weight loss</Text>
+    //     </View>
+    //     <View style={styles.textCell}>
+    //       <Text>{lossEstimate.toLocaleString()} kg</Text>
+    //     </View>
+    //     <View style={styles.textCell} />
+    //   </View>
+    // )
 
     return (
-      <View style={styles.mainContainer}>
-        <View style={styles.tableContainer}>
-          <Table headerRow={this.headerRow} rows={rows} />
-        </View>
-      </View>
+      <ScrollView style={styles.mainContainer}>
+        <KeyboardAvoidingView>
+          <View style={styles.sectionsContainer}>
+            {bmrSection}
+            {currWeightSection}
+            {targetWeightSection}
+            {targetDateSection}
+            {dailyDeficitSection}
+          </View>
+          <View style={styles.statsSection}>
+            <View style={styles.divider} />
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  mainContainer: {},
-  headerRow: {
-    display: 'flex',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: spacing.sm
-  },
-  headerCell: {
-    flex: 1,
-    textAlign: 'center',
-    fontWeight: '500'
-  },
-  row: {
-    width: '100%',
+  sectionContainer: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
-  },
-  cell: {
-    flex: 1,
-    marginHorizontal: spacing.sm
-  },
-  weekdayCell: {
-    textAlign: 'center'
-  },
-  tableContainer: {
-    width: '80%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginHorizontal: spacing.sm / 2
-  },
-  withMarginTop: {
+    alignItems: 'center',
     marginTop: spacing.md
+  },
+  sectionsContainer: {
+    left: '20%'
+  },
+  statsSection: {
+    marginTop: spacing.lg
+  },
+  sectionLabel: {
+    ...textSecondary,
+    textAlign: 'right',
+    width: 100
+  },
+  sectionUnit: {
+    ...textSecondary,
+    textAlign: 'left'
+  },
+  sectionInput: {
+    width: 50,
+    textAlign: 'center',
+    marginLeft: spacing.sm,
+    marginRight: spacing.sm
+  },
+  dateInput: {
+    marginLeft: spacing.sm
+  },
+  mainContainer: {
+    flex: 1,
+    height: '100%'
+  },
+  divider: {
+    height: 1,
+    width: '50%',
+    backgroundColor: 'black'
   }
 })
 
 const mapStateToProps = (state: RootState): Omit<InjectedReduxProps, 'dispatch'> => ({
-  exerciseGoals: state.goals.exercise,
-  kcalGoals: state.goals.kcal
+  goals: state.goals
 })
 
 export const GoalsScreen = connect(mapStateToProps)(GoalsScreenBase)

@@ -1,24 +1,18 @@
 import { Reducer } from 'redux'
 import { Actions, ActionTypes } from './actions'
-import weekIdentifier from 'week-identifier'
-import { Dictionary } from 'utils/some-types'
-
-const week: string = weekIdentifier()
-export type OneNumberPerWeekday = [number, number, number, number, number, number, number]
-export type GoalObj = Dictionary<OneNumberPerWeekday>
 
 export interface GoalsState {
-  exercise: GoalObj
-  kcal: GoalObj
+  bmr: number
+  currWeight: number
+  targetWeight: number
+  targetDate: string
 }
 
 const initialState: GoalsState = {
-  exercise: {
-    [week]: [0, 0, 0, 0, 0, 0, 0]
-  },
-  kcal: {
-    [week]: [0, 0, 0, 0, 0, 0, 0]
-  }
+  bmr: 0,
+  currWeight: 0,
+  targetDate: new Date().toISOString(),
+  targetWeight: 0
 }
 
 export const GoalsReducer: Reducer<GoalsState, Actions> = (
@@ -26,15 +20,11 @@ export const GoalsReducer: Reducer<GoalsState, Actions> = (
   action: Actions
 ): GoalsState => {
   switch (action.type) {
-    case ActionTypes.SET_GOAL: {
-      const { idx, value, key } = action.payload
-      const goal = [...state[key][week]]
-      goal[idx] = value
+    case ActionTypes.UPDATE: {
+      const { value, key } = action.payload
       return {
         ...state,
-        exercise: {
-          2444: [0, 1, 1, 1, 1, 1, 1]
-        }
+        [key]: value
       }
     }
     default:

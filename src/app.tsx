@@ -1,5 +1,5 @@
 import { HomeScreen } from 'screens/home'
-import { createNavigationContainer, createBottomTabNavigator } from 'react-navigation'
+import { createAppContainer, createBottomTabNavigator } from 'react-navigation'
 import React from 'react'
 import { store, persistor } from './store'
 import { Provider } from 'react-redux'
@@ -14,7 +14,7 @@ const AppNavigator = createBottomTabNavigator({
   settings: SettingsScreen
 })
 
-const Navigator = createNavigationContainer(AppNavigator)
+const Navigator = createAppContainer(AppNavigator)
 
 export class App extends React.Component<{}, {}> {
   componentWillMount() {
