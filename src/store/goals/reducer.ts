@@ -1,18 +1,26 @@
 import { Reducer } from 'redux'
 import { Actions, ActionTypes } from './actions'
+import { PersonalNumbers, ActivityLevel } from 'utils/some-types'
+import { getBMR, getTDEE } from 'utils/tdee'
 
-export interface GoalsState {
+export interface GoalsState extends PersonalNumbers {
   bmr: number
-  currWeight: number
-  targetWeight: number
-  targetDate: string
+  tdee: number
+  activityLevel: ActivityLevel
+}
+
+const defaultBodyStats: PersonalNumbers = {
+  weight: 70,
+  height: 180,
+  gender: 'male',
+  age: 25
 }
 
 const initialState: GoalsState = {
-  bmr: 0,
-  currWeight: 0,
-  targetDate: new Date().toISOString(),
-  targetWeight: 0
+  bmr: getBMR(defaultBodyStats),
+  tdee: getTDEE(getBMR(defaultBodyStats), ActivityLevel.moderate),
+  activityLevel: ActivityLevel.moderate,
+  ...defaultBodyStats
 }
 
 export const GoalsReducer: Reducer<GoalsState, Actions> = (
@@ -22,9 +30,17 @@ export const GoalsReducer: Reducer<GoalsState, Actions> = (
   switch (action.type) {
     case ActionTypes.UPDATE: {
       const { value, key } = action.payload
-      return {
+      const newState = {
         ...state,
         [key]: value
+      }
+      const bmr = getBMR(newState)
+      const tdee = getTDEE(bmr, newState.activityLevel)
+
+      return {
+        ...newState,
+        bmr,
+        tdee
       }
     }
     default:

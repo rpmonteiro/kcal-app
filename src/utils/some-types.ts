@@ -5,3 +5,18 @@ export type OneNumberPerDay = [number, number, number, number, number, number, n
 export interface Dictionary<T> {
   [key: string]: T
 }
+
+export type Gender = 'male' | 'female'
+
+export interface PersonalNumbers {
+  weight: number
+  height: number
+  age: number
+  gender: Gender
+}
+
+export enum ActivityLevel {
+  light = 'LIGHT',
+  moderate = 'MODERATE',
+  high = 'HIGH'
+}

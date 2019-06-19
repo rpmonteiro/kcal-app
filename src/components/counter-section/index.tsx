@@ -1,7 +1,7 @@
 import React from 'react'
 import { NumberInput } from 'components/input'
 import { View, StyleSheet, Text } from 'react-native'
-import { margins, spacing, colors } from 'styles/common'
+import { margins, spacing, colors, textPrimary } from 'styles/common'
 import { ThreeButtons } from 'components/three-buttons'
 
 interface Props {
@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.red1
   },
   label: {
-    marginBottom: spacing.sm
+    ...textPrimary,
+    marginBottom: spacing.xs
   },
   buttonsRow: {
     flexDirection: 'row'

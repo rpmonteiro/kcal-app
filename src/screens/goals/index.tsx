@@ -9,8 +9,7 @@ import { spacing, textSecondary } from 'styles/common'
 import { Omit } from 'utils/some-types'
 import { GoalsState } from 'store/goals/reducer'
 import { DatePicker } from 'components/date-picker'
-import { getDaysDiff } from 'utils/date-utils'
-import { kiloOfFat } from 'config'
+import { getTargetDeficit } from 'store/selectors'
 
 interface InjectedReduxProps {
   goals: GoalsState
@@ -23,16 +22,13 @@ class GoalsScreenBase extends Component<InjectedReduxProps> {
   }
 
   render() {
-    const {
-      goals: { bmr, targetDate, targetWeight, currWeight }
-    } = this.props
-    const bmrTotal = bmr * 7
-    const totalDays = getDaysDiff(targetDate)
-    const weightDiff = currWeight - targetWeight
-    const isWeightLoss = weightDiff > 0
-    const weightDiffAbs = Math.abs(weightDiff)
-    const dailyDeficitTarget = parseInt(((weightDiffAbs * kiloOfFat) / totalDays).toFixed(0)) || ''
-    console.log({ totalDays, weightDiff, isWeightLoss, weightDiffAbs, dailyDeficitTarget })
+    const { goals } = this.props
+
+    const components = [
+      {
+        label: ''
+      }
+    ]
 
     const bmrSection = (
       <View style={styles.sectionContainer}>
@@ -91,7 +87,7 @@ class GoalsScreenBase extends Component<InjectedReduxProps> {
     const dailyDeficitSection = (
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionLabel}>Daily deficit</Text>
-        <Text style={styles.sectionInput}>{dailyDeficitTarget}</Text>
+        <Text style={styles.sectionInput}>{dailyDeficit}</Text>
         <Text style={styles.sectionUnit}>kcal</Text>
       </View>
     )
@@ -196,6 +192,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state: RootState): Omit<InjectedReduxProps, 'dispatch'> => ({
+  dailyDeficit: getTargetDeficit(state),
   goals: state.goals
 })
 

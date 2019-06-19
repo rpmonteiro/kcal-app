@@ -29,9 +29,16 @@ export const colors = {
 }
 
 export const spacing = {
+  xs: 5,
   sm: 10,
   md: 20,
   lg: 30
+}
+
+export const fontSize = {
+  sm: 14,
+  md: 16,
+  lg: 20
 }
 
 export const inputs = {
@@ -39,8 +46,14 @@ export const inputs = {
 }
 
 export const textSecondary = {
-  fontSize: 14,
+  fontSize: fontSize.sm,
   color: colors.textSecondary
+}
+
+export const textPrimary = {
+  fontSize: fontSize.md,
+  fontWeight: '500',
+  color: colors.textPrimary
 }
 
 export const margins = {
